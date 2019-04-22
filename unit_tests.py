@@ -51,6 +51,11 @@ class MyUnitTests(TestCase):
         q = "Which team won in Nets@Knicks-2018-10-19?"
         a = "New York Knicks" #107-105
 
+        result = neo.getScoresFromGame("Nets@Knicks-2018-10-19")
+        winner = max(result["Teams"], key=result["Teams"].get)
+
+        assert(winner == a)
+
     def test_when1(self):
         """
         Simple when did two teams play.

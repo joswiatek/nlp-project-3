@@ -43,3 +43,10 @@ def getPlayersFromTeam(teamName):
 
 def getScoresFromGame(gameName):
     result = queryContainsDB("Game", gameName)
+    scores = {"Players" : {}, "Teams" : {}}
+    for r in getRelsOfType(result, "Played"):
+        if "Player" in r.start_node.labels:
+            scores["Players"][r.start_node["name"]] = r["points"]
+        elif "Team" in r.start_node.labels:
+            scores["Teams"][r.start_node["name"]] = r["score"]
+    return scores

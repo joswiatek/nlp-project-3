@@ -8,4 +8,5 @@ if __name__ == "__main__":
     # Retrieve all nodes with a specific type of relationship
     for r in neo.getRelsOfType(result, 'Played'):
         print(r)
+    print(neo.getScoresFromGame("Nets@Knicks-2018-10-19"))
     
