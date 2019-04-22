@@ -42,11 +42,16 @@ def getPlayersFromTeam(teamName):
     return [p['name'] for p in getNodesOfType(result, "Player")]
 
 def getScoresFromGame(gameName):
+    """Returns the scores of Players and Teams from a specific game in a dictionary. 
+    scores["Players"] is a dictionary where the key is the player name, and the value is their score. 
+    scores["Teams"] is a dictionary where the key is the team name and the value is their score. """
+
     result = queryContainsDB("Game", gameName)
-    scores = {"Players" : {}, "Teams" : {}}
+    scores = {"Players" : {}, "Teams" : {}, "Total Points" : 0}
     for r in getRelsOfType(result, "Played"):
         if "Player" in r.start_node.labels:
             scores["Players"][r.start_node["name"]] = r["points"]
         elif "Team" in r.start_node.labels:
             scores["Teams"][r.start_node["name"]] = r["score"]
+    scores["Total Points"] = sum(scores["Teams"].values())
     return scores

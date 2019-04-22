@@ -87,6 +87,10 @@ class MyUnitTests(TestCase):
         q = "How many points were scored in Hornets@Wizards-2019-03-08?"
         a = "223" # Washington Wizards 112; Charlotte Hornets 111
 
+        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+
+        assert(int(a) == result["Total Points"])
+
     def test_score(self):
         """
         What was the final score of a specific game?
@@ -94,12 +98,22 @@ class MyUnitTests(TestCase):
         q = "What was the final score in Hornets@Wizards-2019-03-08?"
         a = {"Washington Wizards 112", "Charlotte Hornets 111"}
 
+        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+        ans = {name + " " + str(score) for name, score in result["Teams"].items()}
+
+        assert(a == ans)
+
     def test_who3(self):
         """
         Who scored X points in specific game?
         """
         q = "Who scored 18 points in Hornets@Wizards-2019-03-08?"
-        a = "Kemba Walker"
+        a = {"Kemba Walker"} # Changed to set
+
+        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+        players = [name for name, points in result["Players"].items() if points == 18]
+
+        assert(a == set(players))
 
     def test_who4(self):
         """
