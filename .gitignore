@@ -1,2 +1,3 @@
 # neo4j secrets
 export_neo4j_vars.sh
+*.pyc
