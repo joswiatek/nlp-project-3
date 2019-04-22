@@ -1,4 +1,5 @@
 from unittest import main, TestCase
+import neo4jUtilities as neo
 
 class MyUnitTests(TestCase):
     """
@@ -19,8 +20,29 @@ class MyUnitTests(TestCase):
             "Frank Ntilikina",
             "Kevin Knox",
             "David Fizdale",
-            "Tim Hardaawy Jr."
+            "Tim Hardaway Jr."
             }
+        
+        result = set(neo.getPlayersFromTeam("New York Knicks"))
+        assert(result == a)
+
+    def test_who2(self):
+        """
+        Simple who is on a team test.
+        """
+        q = "Who plays for the New York Knicks?"
+        a = {"Emmanuel Mudiay",
+            "Allonzo Trier",
+            "Noah Vonleh",
+            "Mitchell Robinson",
+            "Frank Ntilikina",
+            "Kevin Knox",
+            "David Fizdale",
+            "Tim Hardaway Jr."
+            }
+        
+        result = set(neo.getPlayersFromTeam("knicks"))
+        assert(result == a)
 
     def test_which1(self):
         """
@@ -67,14 +89,14 @@ class MyUnitTests(TestCase):
         q = "What was the final score in Hornets@Wizards-2019-03-08?"
         a = {"Washington Wizards 112", "Charlotte Hornets 111"}
 
-    def test_who2(self):
+    def test_who3(self):
         """
         Who scored X points in specific game?
         """
         q = "Who scored 18 points in Hornets@Wizards-2019-03-08?"
         a = "Kemba Walker"
 
-    def test_who3(self):
+    def test_who4(self):
         """
         Who had X rebounds in specific game?
         """
