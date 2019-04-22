@@ -1,15 +1,18 @@
 from neo4j import GraphDatabase
+from os import environ
 
-neo4jUser = 'neo4j'
-neo4jPassword = 'password'
-neo4jUri = 'bolt://localhost:7687'
+neo4j_params = {
+     'user': environ['NLP_NEO4J_USER'],
+     'password': environ['NLP_NEO4J_PASS'],
+     'uri': environ['NLP_NEO4J_URI']
+     }
 
 def queryDB(nodeType, nodeName):
     """Retrieve the node of type nodeType with the name nodeName, along with all
     related nodes and the relationships between them."""
 
     try:
-        neo4jDriver = GraphDatabase.driver(neo4jUri, auth=(neo4jUser, neo4jPassword))
+        neo4jDriver = GraphDatabase.driver(neo4j_params['uri'], auth=(neo4j_params['user'], neo4j_params['password']))
         with neo4jDriver.session() as session:
             matchStatement = "MATCH (n:%s {name: \"%s\"})-[r]-(m) RETURN n, r, m" % (nodeType, nodeName)
             return session.run(matchStatement).graph()
@@ -21,7 +24,7 @@ def queryContainsDB(nodeType, nodeName):
     related nodes and the relationships between them."""
 
     try:
-        neo4jDriver = GraphDatabase.driver(neo4jUri, auth=(neo4jUser, neo4jPassword))
+        neo4jDriver = GraphDatabase.driver(neo4j_params['uri'], auth=(neo4j_params['user'], neo4j_params['password']))
         with neo4jDriver.session() as session:
             matchStatement = "MATCH (n:%s)-[r]-(m) WHERE n.name contains \"%s\" RETURN n, r, m" % (nodeType, nodeName)
             return session.run(matchStatement).graph()
@@ -40,4 +43,3 @@ def getPlayersFromTeam(teamName):
 
 def getScoresFromGame(gameName):
     result = queryContainsDB("Game", gameName)
-    
