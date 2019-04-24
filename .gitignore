@@ -2,3 +2,4 @@
 export_neo4j_vars.sh
 *.pyc
 stanford-corenlp-full*
+.vscode/

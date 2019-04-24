@@ -41,6 +41,10 @@ def getPlayersFromTeam(teamName):
     result = queryContainsDB("Team", teamName.title())
     return [p['name'] for p in getNodesOfType(result, "Player")]
 
+def getTeamFromPlayer(playerName):
+    result = queryContainsDB("Player", playerName.title())
+    return [p['name'] for p in getNodesOfType(result, "Team")]
+
 def getScoresFromGame(gameName):
     """Returns the scores of Players and Teams from a specific game in a dictionary. 
     scores["Players"] is a dictionary where the key is the player name, and the value is their score. 
@@ -54,4 +58,30 @@ def getScoresFromGame(gameName):
         elif "Team" in r.start_node.labels:
             scores["Teams"][r.start_node["name"]] = r["score"]
     scores["Total Points"] = sum(scores["Teams"].values())
+    scores["Winner"] = max(scores["Teams"], key=scores["Teams"].get)
     return scores
+
+
+
+
+def getAnswer(parsed_q):
+    players = parsed_q[0]
+    print(players)
+    teams = parsed_q[1]
+    relation = parsed_q[2]
+    w_word = parsed_q[3]
+    games = parsed_q[4]
+
+    if w_word is None:
+        return 'IDK Google it!'
+    try:
+        if relation == 'plays for' and w_word == 'Who':
+            return getPlayersFromTeam(teams[0])
+        if w_word == 'Which':
+            if relation == 'play for':
+                return getTeamFromPlayer(players[0])
+            elif 'won' in relation:
+                scores = getScoresFromGame(games[0])
+                return scores['Winner']
+    except:
+        return 'IDK Google it!'

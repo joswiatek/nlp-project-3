@@ -1,5 +1,6 @@
 from unittest import main, TestCase
 import neo4jUtilities as neo
+import questionProcessingOpenie as qa
 
 class MyUnitTests(TestCase):
     """
@@ -23,14 +24,15 @@ class MyUnitTests(TestCase):
             "Tim Hardaway Jr."
             }
         
-        result = set(neo.getPlayersFromTeam("New York Knicks"))
+        parsed_q = qa.process_question(q)
+        result = set(neo.getAnswer(parsed_q))
         assert(result == a)
 
     def test_who2(self):
         """
         Simple who is on a team test.
         """
-        q = "Who plays for the New York Knicks?"
+        q = "Who plays for the knicks?" # if knicks was replaced with bulls, this would fail!!
         a = {"Emmanuel Mudiay",
             "Allonzo Trier",
             "Noah Vonleh",
@@ -41,7 +43,8 @@ class MyUnitTests(TestCase):
             "Tim Hardaway Jr."
             }
         
-        result = set(neo.getPlayersFromTeam("knicks"))
+        parsed_q = qa.process_question(q)
+        result = set(neo.getAnswer(parsed_q))
         assert(result == a)
 
     def test_which1(self):
@@ -50,11 +53,9 @@ class MyUnitTests(TestCase):
         """
         q = "Which team won in Nets@Knicks-2018-10-19?"
         a = "New York Knicks" #107-105
-
-        result = neo.getScoresFromGame("Nets@Knicks-2018-10-19")
-        winner = max(result["Teams"], key=result["Teams"].get)
-
-        assert(winner == a)
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(result == a)
 
     def test_when1(self):
         """
@@ -68,7 +69,7 @@ class MyUnitTests(TestCase):
         """
         When did two teams play? (Given the teams' full names)
         """
-        q = "When did the San Antonio Spurs and Houston Rockets play?"
+        q = "What did the San Antonio Spurs and Houston Rockets play?"
         # todo: check for multiple dates that are still valid
         a = "2019-03-23" # Rockets@Spurs-2019-03-23
 
