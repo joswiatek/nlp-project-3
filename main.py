@@ -3,9 +3,10 @@ import questionProcessingOpenie as qa
 
 
 if __name__ == "__main__":
-    text = "Who plays for the Chicago Bulls?"
+    text = "What was the final score in Hornets@Wizards-2019-03-08?"
     parsed_q = qa.process_question(text)
-    neo.getAnswer(parsed_q)
+    temp = neo.getAnswer(parsed_q)
+    print('temp', temp)
 
     # result = neo.queryContainsDB("Game", "Nets@Knicks-2018-10-19")
     # # Retrieve all nodes of a certain type

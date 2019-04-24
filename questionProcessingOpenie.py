@@ -39,10 +39,11 @@ def process_question(text):
     players = []
     teams = []
     games = []
+    nouns = []
     relation = None
     w_word = None
     for s in output['sentences']:
-        print(s)
+        # print(s)
         for e in s['entitymentions']:
             if e['ner'] == 'PERSON':
                 players.append(e['text'])
@@ -58,10 +59,16 @@ def process_question(text):
 
             elif t['pos'] in {'WP', 'WRB', 'WDT', 'WP$'}:
                 w_word = t['word']
+            
+            elif t['pos'] in {'NNS', 'NN'}: # plural nouns and nouns (i.e. points, rebounds, score)
+                if t['word'] not in players and t['word'] not in teams and t['word'] not in games:
+                    nouns.append(t['word'])
 
 
-    print(w_word)
-    print(players)
-    print(teams)
-    print(relation)
-    return players, teams, relation, w_word, games
+    # print(w_word)
+    # print(players)
+    # print(teams)
+    # print(relation)
+    # print(games)
+    # print(nouns)
+    return players, teams, relation, w_word, games, nouns

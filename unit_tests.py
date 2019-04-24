@@ -69,7 +69,7 @@ class MyUnitTests(TestCase):
         """
         When did two teams play? (Given the teams' full names)
         """
-        q = "What did the San Antonio Spurs and Houston Rockets play?"
+        q = "When did the San Antonio Spurs and Houston Rockets play?"
         # todo: check for multiple dates that are still valid
         a = "2019-03-23" # Rockets@Spurs-2019-03-23
 
@@ -85,12 +85,13 @@ class MyUnitTests(TestCase):
         """
         How many points were scored in a specific game?
         """
-        q = "How many points were scored in Hornets@Wizards-2019-03-08?"
+        q = "How many total points were scored in Hornets@Wizards-2019-03-08?"
         a = "223" # Washington Wizards 112; Charlotte Hornets 111
 
-        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
-
-        assert(int(a) == result["Total Points"])
+        #result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(int(a) == result)
 
     def test_score(self):
         """
@@ -99,10 +100,12 @@ class MyUnitTests(TestCase):
         q = "What was the final score in Hornets@Wizards-2019-03-08?"
         a = {"Washington Wizards 112", "Charlotte Hornets 111"}
 
-        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
-        ans = {name + " " + str(score) for name, score in result["Teams"].items()}
+        # result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+        # ans = {name + " " + str(score) for name, score in result["Teams"].items()}
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
 
-        assert(a == ans)
+        assert(a == result)
 
     def test_who3(self):
         """

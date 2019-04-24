@@ -66,11 +66,11 @@ def getScoresFromGame(gameName):
 
 def getAnswer(parsed_q):
     players = parsed_q[0]
-    print(players)
     teams = parsed_q[1]
     relation = parsed_q[2]
     w_word = parsed_q[3]
     games = parsed_q[4]
+    nouns = parsed_q[5]
 
     if w_word is None:
         return 'IDK Google it!'
@@ -83,5 +83,19 @@ def getAnswer(parsed_q):
             elif 'won' in relation:
                 scores = getScoresFromGame(games[0])
                 return scores['Winner']
+        if w_word == 'How':
+            # either how many points or rebounds
+            if players != [] and games != []:
+                return "implement next"
+            if games != []:
+                result = getScoresFromGame(games[0])
+                return result["Total Points"]
+            if player != []:
+                result = "todo"
+        if w_word == 'What':
+            if games != [] and nouns[0] == 'score':
+                result = getScoresFromGame(games[0])
+                return {name + " " + str(score) for name, score in result["Teams"].items()}
+
     except:
         return 'IDK Google it!'
