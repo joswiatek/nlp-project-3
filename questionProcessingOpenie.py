@@ -1,14 +1,16 @@
-from pycorenlp import StanfordCoreNLP
+from stanfordnlp.server import CoreNLPClient
 import json
+import os
 
 #To run openie cd into stanford folder and run this command: java -mx8g -Xmx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators "tokenize,ssplit,pos,lemma,parse,sentiment,coref,openie" -port 9000 -timeout 30000
+os.environ['CORENLP_HOME'] = os.path.join(os.getcwd(), 'stanford-corenlp-full-2018-10-05/')
+nlpClient = CoreNLPClient(timeout=30000, memory='16G', output_format='json')
 
 def coleman():
-    nlp = StanfordCoreNLP('http://localhost:9000')
+    global nlpClient
     text = "Does Jimmy Butler play for the Chicago Bulls?" #Doesn't pick up 'Bulls' as a team
     #text = "When did the San Antonio Spurs and Houston Rockets play?"
-    output = nlp.annotate(text, properties={'annotators': 'pos, ner, relation',' outputFormat': 'json'})
-    output = json.loads(output)
+    output = nlpClient.annotate(text, annotators=['pos, ner, relation'])
     players = []
     teams = []
     relation = None
@@ -30,11 +32,10 @@ def coleman():
 
 
 def process_question(text):
-    nlp = StanfordCoreNLP('http://localhost:9000')
+    global nlpClient
     #text = "Does Jimmy Butler play for the Chicago Bulls?" #Doesn't pick up 'Bulls' as a team
     #text = "When did the San Antonio Spurs and Houston Rockets play?"
-    output = nlp.annotate(text, properties={'annotators': 'pos, ner, relation',' outputFormat': 'json'})
-    output = json.loads(output)
+    output = nlpClient.annotate(text, annotators=['pos, ner, relation'])
     players = []
     teams = []
     games = []
