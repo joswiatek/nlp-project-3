@@ -17,7 +17,7 @@ def queryDB(nodeType, nodeName):
             matchStatement = "MATCH (n:%s {name: \"%s\"})-[r]-(m) RETURN n, r, m" % (nodeType, nodeName)
             return session.run(matchStatement).graph()
     except Exception as e:
-        print('Exception during write to Neo4j: %s' % e)
+        print('Exception during read from Neo4j: %s' % e)
 
 def queryContainsDB(nodeType, nodeName):
     """Retrieve the node of type nodeType with the name nodeName using the contains clause, along with all
@@ -29,7 +29,7 @@ def queryContainsDB(nodeType, nodeName):
             matchStatement = "MATCH (n:%s)-[r]-(m) WHERE n.name contains \"%s\" RETURN n, r, m" % (nodeType, nodeName)
             return session.run(matchStatement).graph()
     except Exception as e:
-        print('Exception during write to Neo4j: %s' % e)
+        print('Exception during read from Neo4j: %s' % e)
 
 def getNodesOfType(graph, label):
     return [n for n in graph.nodes if label in n.labels]
@@ -46,8 +46,8 @@ def getTeamFromPlayer(playerName):
     return [p['name'] for p in getNodesOfType(result, "Team")]
 
 def getScoresFromGame(gameName):
-    """Returns the scores of Players and Teams from a specific game in a dictionary. 
-    scores["Players"] is a dictionary where the key is the player name, and the value is their score. 
+    """Returns the scores of Players and Teams from a specific game in a dictionary.
+    scores["Players"] is a dictionary where the key is the player name, and the value is their score.
     scores["Teams"] is a dictionary where the key is the team name and the value is their score. """
 
     result = queryContainsDB("Game", gameName)
