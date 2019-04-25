@@ -3,7 +3,7 @@ import questionProcessingOpenie as qa
 
 
 if __name__ == "__main__":
-    text = "What was the final score in Hornets@Wizards-2019-03-08?"
+    text = "Who had 10 rebounds in Hornets@Wizards-2019-03-08?"
     parsed_q = qa.process_question(text)
     temp = neo.getAnswer(parsed_q)
     print('temp', temp)

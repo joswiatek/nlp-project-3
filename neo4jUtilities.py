@@ -49,7 +49,7 @@ def getScoresFromGame(gameName):
     """Returns the scores of Players and Teams from a specific game in a dictionary.
     scores["Players"] is a dictionary where the key is the player name, and the value is their score.
     scores["Teams"] is a dictionary where the key is the team name and the value is their score. """
-
+    
     result = queryContainsDB("Game", gameName)
     scores = {"Players" : {}, "Teams" : {}, "Total Points" : 0}
     for r in getRelsOfType(result, "Played"):
@@ -72,27 +72,36 @@ def getAnswer(parsed_q):
     games = parsed_q[4]
     nouns = parsed_q[5]
     lookingFor = parsed_q[6]
+    num = parsed_q[7]
 
     if w_word is None:
         return 'IDK Google it!'
     try:
-        if relation == 'plays for' and w_word == 'Who':
-            return getPlayersFromTeam(teams[0])
+        if w_word == 'Who':
+            if relation == 'plays for':
+                return getPlayersFromTeam(teams[0])
+            if lookingFor == 'points' and games != []:
+                result = getScoresFromGame(games[0])
+                return {name for name, points in result["Players"].items() if points == num}
+
         if w_word == 'Which':
             if relation == 'play for':
                 return getTeamFromPlayer(players[0])
             elif 'won' in relation:
                 scores = getScoresFromGame(games[0])
                 return scores['Winner']
+
         if w_word == 'How':
             # either how many points or rebounds
             if players != [] and games != []:
-                return "implement next"
+                result = getScoresFromGame(games[0])
+                return result['Players'][players[0]]
             if games != []:
                 result = getScoresFromGame(games[0])
                 return result["Total Points"]
             if player != []:
                 result = "todo"
+
         if w_word == 'What':
             if games != [] and nouns[0] == 'score':
                 result = getScoresFromGame(games[0])

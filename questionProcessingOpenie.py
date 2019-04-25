@@ -44,6 +44,7 @@ def process_question(text):
     relationIndex = -1
     w_word = None
     lookingFor = None
+    num = None
     for s in output['sentences']:
         #print(s)
         for e in s['entitymentions']:
@@ -73,6 +74,8 @@ def process_question(text):
             elif t['pos'] in {'NNS', 'NN'}: # plural nouns and nouns (i.e. points, rebounds, score)
                 if t['word'] not in players and t['word'] not in teams and t['word'] not in games:
                     nouns.append(t['word'])
+            elif t['pos'] == 'CD':
+                num = int(t['word'])
 
     # print('w word:')
     # print(w_word)
@@ -80,8 +83,14 @@ def process_question(text):
     # print(players)
     # print('teams:')
     # print(teams)
+    # print('games:')
+    # print(games)
     # print('relation:')
     # print(relation)
     # print('looking for:')
     # print(lookingFor)
-    return players, teams, relation, w_word, games, nouns, lookingFor
+    # print('nouns:')
+    # print(nouns)
+    # print('num:')
+    # print(num)
+    return players, teams, relation, w_word, games, nouns, lookingFor, num

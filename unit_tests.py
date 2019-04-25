@@ -73,7 +73,6 @@ class MyUnitTests(TestCase):
         # todo: check for multiple dates that are still valid
         a = "2019-03-23" # Rockets@Spurs-2019-03-23
 
-
     def test_which2(self):
         """
         Which team was at home? (Check relationship attribute)
@@ -83,7 +82,7 @@ class MyUnitTests(TestCase):
 
     def test_points(self):
         """
-        How many points were scored in a specific game?
+        How many total points were scored in a specific game?
         """
         q = "How many total points were scored in Hornets@Wizards-2019-03-08?"
         a = "223" # Washington Wizards 112; Charlotte Hornets 111
@@ -100,11 +99,19 @@ class MyUnitTests(TestCase):
         q = "What was the final score in Hornets@Wizards-2019-03-08?"
         a = {"Washington Wizards 112", "Charlotte Hornets 111"}
 
-        # result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
-        # ans = {name + " " + str(score) for name, score in result["Teams"].items()}
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
+        assert(a == result)
 
+    def test_points2(self):
+        """
+        How many points did person score in specific game?
+        """
+        q = "How many points did Kemba Walker score in Hornets@Wizards-2019-03-08?"
+        a = 18
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
         assert(a == result)
 
     def test_who3(self):
@@ -114,10 +121,9 @@ class MyUnitTests(TestCase):
         q = "Who scored 18 points in Hornets@Wizards-2019-03-08?"
         a = {"Kemba Walker"} # Changed to set
 
-        result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
-        players = [name for name, points in result["Players"].items() if points == 18]
-
-        assert(a == set(players))
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == result)
 
     def test_who4(self):
         """
