@@ -125,4 +125,4 @@ def process_question_dep(text):
     print(relation)
     print('looking for:')
     print(lookingFor)
-    return players, teams, relation, w_word, games, nouns
+    return players, teams, relation, w_word, games, nouns, lookingFor
