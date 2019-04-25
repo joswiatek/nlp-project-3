@@ -5,15 +5,23 @@ import json
 
 
 if __name__ == "__main__":
-    text = "Which team was at home on 2019-03-23, the Spurs or Rockets?"
-    parsed_q = qa.process_question(text)
-    # temp = neo.getAnswer(parsed_q)
+    shouldStop = False
+    while(not shouldStop):
+        print("Enter a question about the NBA.")
+        text = input()
+        if(text.lower() in {'q', 'quit'}):
+            shouldStop = True
+        else:
+            parsed_q = qa.process_question(text)
+            print("Answer:")
+            print(neo.getAnswer(parsed_q))
+
     # print('temp', temp)
 
 
     # with open("raw_teams.json") as f:
     #     d = json.load(f)
-    
+
     # dicti = {}
     # for i in d:
     #     dicti[i['teamName']] = i['simpleName']
