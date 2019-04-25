@@ -71,6 +71,7 @@ def getAnswer(parsed_q):
     w_word = parsed_q[3]
     games = parsed_q[4]
     nouns = parsed_q[5]
+    lookingFor = parsed_q[6]
 
     if w_word is None:
         return 'IDK Google it!'
