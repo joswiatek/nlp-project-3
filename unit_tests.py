@@ -77,8 +77,13 @@ class MyUnitTests(TestCase):
         """
         Which team was at home? (Check relationship attribute)
         """    
-        q = "Were the Spurs or Rockets at home on 2019-03-23?"
-        a = "Houston Rockets"
+        q = "Which team was at home on 2019-03-23, the Spurs or Rockets?"
+        a = "San Antonio Spurs"
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(result == a)
+
 
     def test_points(self):
         """

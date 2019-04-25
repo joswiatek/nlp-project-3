@@ -1,11 +1,13 @@
 from neo4j import GraphDatabase
 from os import environ
+import json
 
 neo4j_params = {
      'user': environ['NLP_NEO4J_USER'],
      'password': environ['NLP_NEO4J_PASS'],
      'uri': environ['NLP_NEO4J_URI']
      }
+team_names = json.load(open("teams.json"))
 
 def queryDB(nodeType, nodeName):
     """Retrieve the node of type nodeType with the name nodeName, along with all
@@ -30,6 +32,24 @@ def queryContainsDB(nodeType, nodeName):
             return session.run(matchStatement).graph()
     except Exception as e:
         print('Exception during read from Neo4j: %s' % e)
+
+def getHomeFromTeamsAndDate(team1, team2, date):
+    if team1 in team_names:
+        team1 = team_names[team1]
+    if team2 in team_names:
+        team2 = team_names[team2]
+
+    try:
+        neo4jDriver = GraphDatabase.driver(neo4j_params['uri'], auth=(neo4j_params['user'], neo4j_params['password']))
+        with neo4jDriver.session() as session:
+            matchStatement = "MATCH (n:%s)-[r]-(m) WHERE (n.name contains \"%s\"  AND n.name contains \"%s\" AND n.name contains \"%s\") RETURN n, r, m" % ("Game", team1, team2, date)
+            graph = session.run(matchStatement).graph()
+    except Exception as e:
+        print('Exception during read from Neo4j: %s' % e)
+    
+    for r in getRelsOfType(graph, "Played"):
+        if "home_team" in r and r["home_team"] == True:
+            return r.start_node["name"]
 
 def getNodesOfType(graph, label):
     return [n for n in graph.nodes if label in n.labels]
@@ -61,9 +81,6 @@ def getScoresFromGame(gameName):
     scores["Winner"] = max(scores["Teams"], key=scores["Teams"].get)
     return scores
 
-
-
-
 def getAnswer(parsed_q):
     players = parsed_q[0]
     teams = parsed_q[1]
@@ -90,6 +107,8 @@ def getAnswer(parsed_q):
             elif 'won' in relation:
                 scores = getScoresFromGame(games[0])
                 return scores['Winner']
+            elif 'home' in nouns:
+                return getHomeFromTeamsAndDate(teams[0], teams[1], games[0])
 
         if w_word == 'How':
             # either how many points or rebounds
