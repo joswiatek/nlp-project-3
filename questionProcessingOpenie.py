@@ -75,7 +75,7 @@ def process_question(text):
                         relation = t['word'] + " " + tokenAfter['word']
             elif t['pos'] in {'WP', 'WRB', 'WDT', 'WP$'}:
                 w_word = t['word']
-            elif t['pos'] in {'NNS', 'NN'}: # plural nouns and nouns (i.e. points, rebounds, score)
+            elif t['pos'] in {'NNS', 'NN', 'NNP'}: # plural nouns and nouns (i.e. points, rebounds, score)
                 if t['word'] not in players and t['word'] not in teams and t['word'] not in games:
                     nouns.append(t['word'])
             elif t['pos'] == 'CD' and t['ner'] != "DATE":
