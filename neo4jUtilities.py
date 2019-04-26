@@ -101,6 +101,16 @@ def getDatesFromTeams(team1, team2):
     nodes = getNodesOfType(graph, "Game")
     return [getDateFromGame(n['name']) for n in nodes]
 
+def getReboundsFromGame(gameName):
+    graph = queryContainsDB("Game", gameName)
+    rebounds = {"Players" : {}, "Teams" : {}}
+    for r in getRelsOfType(graph, "Played"):
+        if "Player" in r.start_node.labels and "rebounds" in r:
+            rebounds["Players"][r.start_node["name"]] = r["rebounds"]
+        elif "Team" in r.start_node.labels and "rebounds" in r:
+            rebounds["Teams"][r.start_node["name"]] = r["rebounds"]
+    return rebounds
+
 def getAnswer(parsed_q):
     players = parsed_q[0]
     teams = parsed_q[1]
@@ -120,6 +130,9 @@ def getAnswer(parsed_q):
             if lookingFor == 'points' and games != []:
                 result = getScoresFromGame(games[0])
                 return {name for name, points in result["Players"].items() if points == num}
+            elif "rebound" in lookingFor and games != []:
+                result = getReboundsFromGame(games[0])
+                return {name for name, rebounds in result["Players"].items() if rebounds == num}
 
         if w_word == 'Which':
             if relation == 'play for':

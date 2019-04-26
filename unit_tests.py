@@ -146,7 +146,10 @@ class MyUnitTests(TestCase):
         """
         q = "Who had 10 rebounds in Hornets@Wizards-2019-03-08?"
         a = "Jeremy Lamb"
-    
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
 
 
 if __name__ == "__main__":

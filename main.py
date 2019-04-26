@@ -5,8 +5,6 @@ import json
 
 
 if __name__ == "__main__":
-    # print(neo.getDatesFromTeams("Spurs", "Mavericks"))
-
     shouldStop = False
     while(not shouldStop):
         print("Enter a question about the NBA.")
