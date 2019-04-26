@@ -179,7 +179,7 @@ class MyUnitTests(TestCase):
 
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
-        assert(a in result)
+        assert(a == set(result))
 
 
 if __name__ == "__main__":
