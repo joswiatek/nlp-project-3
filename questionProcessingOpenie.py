@@ -7,6 +7,9 @@ import re
 os.environ['CORENLP_HOME'] = os.path.join(os.getcwd(), 'stanford-corenlp-full-2018-10-05/')
 nlpClient = CoreNLPClient(timeout=30000, memory='16G', output_format='json')
 
+team_names = json.load(open("teams.json"))
+team_nicknames_as_key = {v: k for k, v in team_names.items()}
+
 def coleman():
     global nlpClient
     text = "Does Jimmy Butler play for the Chicago Bulls?" #Doesn't pick up 'Bulls' as a team
@@ -79,6 +82,10 @@ def process_question(text):
                 num = int(t['word'])
             elif t['pos'] in {'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS'}:
                 adjectives.append(t['word'])
+    
+    for n in nouns:
+        if n.title() in team_nicknames_as_key:
+            teams.append(team_nicknames_as_key[n.title()])
 
     # print('w word:')
     # print(w_word)
