@@ -172,6 +172,14 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
+    
+    def test_who7(self):
+        q = "Who plays for the Bulls?"
+        a = {'Lauri Markkanen', 'Zach LaVine', 'Jim Boylen', 'Kris Dunn', 'Fred Hoiberg', 'Justin Holiday', 'Robin Lopez', 'Wendell Carter Jr.', 'Bobby Portis'}
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
 
 
 if __name__ == "__main__":
