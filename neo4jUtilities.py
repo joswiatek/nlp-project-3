@@ -84,12 +84,11 @@ def getScoresFromGame(gameName):
 def getDateFromGame(gameName):
     return gameName[-10:]
 
-def getDatesFromTeams(team1, team2):
+def getGameFromTeams(team1, team2):
     if team1 in team_names:
         team1 = team_names[team1]
     if team2 in team_names:
         team2 = team_names[team2]
-
     try:
         neo4jDriver = GraphDatabase.driver(neo4j_params['uri'], auth=(neo4j_params['user'], neo4j_params['password']))
         with neo4jDriver.session() as session:
@@ -99,6 +98,10 @@ def getDatesFromTeams(team1, team2):
         print('Exception during read from Neo4j: %s' % e)
     
     nodes = getNodesOfType(graph, "Game")
+    return nodes
+
+def getDatesFromTeams(team1, team2):
+    nodes = getGameFromTeams(team1, team2)
     return [getDateFromGame(n['name']) for n in nodes]
 
 def getReboundsFromGame(gameName):
@@ -111,6 +114,25 @@ def getReboundsFromGame(gameName):
             rebounds["Teams"][r.start_node["name"]] = r["rebounds"]
     return rebounds
 
+def modifyGame(games, teams):
+    """
+    Check for when games are only the date and replace them with the full
+    team name if one exists.
+    """
+    # if length = 10 convert the date to a specific game
+    if len(games[0]) == 10:
+        # convert date to team1@team2-date
+        try:
+            game_nodes = getGameFromTeams(teams[0], teams[1])
+            for g in game_nodes:
+                g_name = g['name']
+                if games[0] in g_name:
+                    games[0] = g_name
+                    break
+        except Exception as e:
+            print(e)
+    return games[0]
+
 def getAnswer(parsed_q):
     players = parsed_q[0]
     teams = parsed_q[1]
@@ -121,6 +143,9 @@ def getAnswer(parsed_q):
     lookingFor = parsed_q[6]
     num = parsed_q[7]
     adjectives = parsed_q[8]
+
+    if len(games) > 0:
+        games[0] = modifyGame(games, teams)
 
     if w_word is None:
         return 'IDK Google it!'
