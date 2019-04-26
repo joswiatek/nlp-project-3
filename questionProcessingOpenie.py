@@ -45,6 +45,7 @@ def process_question(text):
     w_word = None
     lookingFor = None
     num = None
+    adjectives = []
     for s in output['sentences']:
         #print(s)
         for e in s['entitymentions']:
@@ -76,6 +77,8 @@ def process_question(text):
                     nouns.append(t['word'])
             elif t['pos'] == 'CD' and t['ner'] != "DATE":
                 num = int(t['word'])
+            elif t['pos'] in {'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS'}:
+                adjectives.append(t['word'])
 
     # print('w word:')
     # print(w_word)
@@ -93,4 +96,6 @@ def process_question(text):
     # print(nouns)
     # print('num:')
     # print(num)
-    return players, teams, relation, w_word, games, nouns, lookingFor, num
+    # print('adjectives:')
+    # print(adjectives)
+    return players, teams, relation, w_word, games, nouns, lookingFor, num, adjectives

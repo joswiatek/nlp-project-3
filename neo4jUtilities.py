@@ -120,6 +120,7 @@ def getAnswer(parsed_q):
     nouns = parsed_q[5]
     lookingFor = parsed_q[6]
     num = parsed_q[7]
+    adjectives = parsed_q[8]
 
     if w_word is None:
         return 'IDK Google it!'
@@ -129,6 +130,10 @@ def getAnswer(parsed_q):
                 return getPlayersFromTeam(teams[0])
             if lookingFor == 'points' and games != []:
                 result = getScoresFromGame(games[0])
+                if 'most' in adjectives:
+                    return max(result["Players"], key=result["Players"].get)
+                elif 'least' in adjectives:
+                    return min(result["Players"], key=result["Players"].get)
                 return {name for name, points in result["Players"].items() if points == num}
             elif "rebound" in lookingFor and games != []:
                 result = getReboundsFromGame(games[0])

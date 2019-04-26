@@ -150,6 +150,28 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
+    
+    def test_who5(self):
+        """
+        Who scored the most points in specific game?
+        """
+        q = "Who scored the most points in Heat@Nets-2019-03-02?"
+        a = "Derrick Jones Jr."
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
+    
+    def test_who6(self):
+        """
+        Who scored the least points in specific game?
+        """
+        q = "Who scored the least points in Bucks@76ers-2019-03-17?"
+        a = "Khris Middleton"
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
 
 
 if __name__ == "__main__":
