@@ -65,6 +65,11 @@ class MyUnitTests(TestCase):
         # todo: check for multiple dates that are still valid
         a = "2019-03-23" # Rockets@Spurs-2019-03-23
 
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+
+        assert(a in result)
+
     def test_when2(self):
         """
         When did two teams play? (Given the teams' full names)
@@ -72,6 +77,11 @@ class MyUnitTests(TestCase):
         q = "When did the San Antonio Spurs and Houston Rockets play?"
         # todo: check for multiple dates that are still valid
         a = "2019-03-23" # Rockets@Spurs-2019-03-23
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+
+        assert(a in result)
 
     def test_which2(self):
         """

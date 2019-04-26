@@ -81,11 +81,31 @@ def getScoresFromGame(gameName):
     scores["Winner"] = max(scores["Teams"], key=scores["Teams"].get)
     return scores
 
+def getDateFromGame(gameName):
+    return gameName[-10:]
+
+def getDatesFromTeams(team1, team2):
+    if team1 in team_names:
+        team1 = team_names[team1]
+    if team2 in team_names:
+        team2 = team_names[team2]
+
+    try:
+        neo4jDriver = GraphDatabase.driver(neo4j_params['uri'], auth=(neo4j_params['user'], neo4j_params['password']))
+        with neo4jDriver.session() as session:
+            matchStatement = "MATCH (n:%s)-[r]-(m) WHERE (n.name contains \"%s\"  AND n.name contains \"%s\") RETURN n, r, m" % ("Game", team1, team2)
+            graph = session.run(matchStatement).graph()
+    except Exception as e:
+        print('Exception during read from Neo4j: %s' % e)
+    
+    nodes = getNodesOfType(graph, "Game")
+    return [getDateFromGame(n['name']) for n in nodes]
+
 def getAnswer(parsed_q):
     players = parsed_q[0]
     teams = parsed_q[1]
     relation = parsed_q[2]
-    w_word = parsed_q[3]
+    w_word = parsed_q[3].title()
     games = parsed_q[4]
     nouns = parsed_q[5]
     lookingFor = parsed_q[6]
@@ -118,13 +138,17 @@ def getAnswer(parsed_q):
             if games != []:
                 result = getScoresFromGame(games[0])
                 return result["Total Points"]
-            if player != []:
+            if players != []:
                 result = "todo"
 
         if w_word == 'What':
             if games != [] and nouns[0] == 'score':
                 result = getScoresFromGame(games[0])
                 return {name + " " + str(score) for name, score in result["Teams"].items()}
+        
+        if w_word == 'When':
+            if "play" in relation:
+                return getDatesFromTeams(teams[0], teams[1])
 
     except:
         return 'IDK Google it!'
