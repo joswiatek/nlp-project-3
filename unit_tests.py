@@ -181,6 +181,72 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(a == set(result))
 
+    def test_who8(self):
+        q = "Who plays for the bulls?"
+        a = {'Lauri Markkanen', 'Zach LaVine', 'Jim Boylen', 'Kris Dunn', 'Fred Hoiberg', 'Justin Holiday', 'Robin Lopez', 'Wendell Carter Jr.', 'Bobby Portis'}
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == set(result))
+
+    def test_who9(self):
+        q = "Who plays for the Heat?"
+        a = {'Tyler Johnson', 'Erik Spoelstra', 'Josh Richardson', 'Hassan Whiteside', 'Justise Winslow', 'Dwyane Wade', 'James Johnson', 'Goran Dragic', 'Derrick Jones Jr.'}
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == set(result))
+
+    def test_who10(self):
+        q = "Who plays for the heat?"
+        a = {'Tyler Johnson', 'Erik Spoelstra', 'Josh Richardson', 'Hassan Whiteside', 'Justise Winslow', 'Dwyane Wade', 'James Johnson', 'Goran Dragic', 'Derrick Jones Jr.'}
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == set(result))
+
+    def test_score2(self):
+        """
+        What was the final score of a specific game given in a general format?
+        """
+        q = "What was the final score for the Hornets and the Wizards on 2019-03-08?"
+        a = {"Washington Wizards 112", "Charlotte Hornets 111"}
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == result)
+
+    def test_which3(self):
+        """
+        Simple which team won a specific game given in a general format.
+        """
+        q = "Which team won on 2018-10-19, the Knicks or the Nets?"
+        a = "New York Knicks" #107-105
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(result == a)
+
+    def test_which4(self):
+        """
+        Simple which team won a specific game given in a general format.
+        """
+        q = "Which team won on 2018-10-19, the New York Knicks or the Brooklyn Nets?"
+        a = "New York Knicks" #107-105
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(result == a)
+
+    # def test_who11(self):
+    #     """
+    #     Who scored the least points in specific game given in a general format?
+    #     """
+    #     q = "Who scored the least points in the game between the Bucks and the 76ers on 2019-03-17?"
+    #     a = "Khris Middleton"
+
+    #     parsed_q = qa.process_question(q)
+    #     result = neo.getAnswer(parsed_q)
+    #     assert(a in result)
+
 
 if __name__ == "__main__":
     main()

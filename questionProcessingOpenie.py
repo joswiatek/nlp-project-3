@@ -8,7 +8,7 @@ os.environ['CORENLP_HOME'] = os.path.join(os.getcwd(), 'stanford-corenlp-full-20
 nlpClient = CoreNLPClient(timeout=30000, memory='16G', output_format='json')
 
 team_names = json.load(open("teams.json"))
-team_nicknames_as_key = {v: k for k, v in team_names.items()}
+team_nicknames_as_key = {v.title(): k for k, v in team_names.items()}
 
 def coleman():
     global nlpClient
@@ -75,7 +75,7 @@ def process_question(text):
                         relation = t['word'] + " " + tokenAfter['word']
             elif t['pos'] in {'WP', 'WRB', 'WDT', 'WP$'}:
                 w_word = t['word']
-            elif t['pos'] in {'NNS', 'NN', 'NNP'}: # plural nouns and nouns (i.e. points, rebounds, score)
+            elif t['pos'] in {'NNS', 'NN', 'NNP', 'NNPS'}: # plural nouns and nouns (i.e. points, rebounds, score)
                 if t['word'] not in players and t['word'] not in teams and t['word'] not in games:
                     nouns.append(t['word'])
             elif t['pos'] == 'CD' and t['ner'] != "DATE":
