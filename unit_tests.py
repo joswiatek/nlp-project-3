@@ -94,7 +94,6 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(result == a)
 
-
     def test_points(self):
         """
         How many total points were scored in a specific game?
@@ -216,7 +215,7 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(a == result)
 
-    def test_which3(self):
+    def test_which5(self):
         """
         Simple which team won a specific game given in a general format.
         """
@@ -226,7 +225,7 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(result == a)
 
-    def test_which4(self):
+    def test_which6(self):
         """
         Simple which team won a specific game given in a general format.
         """
@@ -236,16 +235,72 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(result == a)
 
-    # def test_who11(self):
-    #     """
-    #     Who scored the least points in specific game given in a general format?
-    #     """
-    #     q = "Who scored the least points in the game between the Bucks and the 76ers on 2019-03-17?"
-    #     a = "Khris Middleton"
+    def test_points4(self):
+        """
+        How many total points were scored in a specific game?
+        """
+        q = "How many total points were scored between the Hornets and the Wizards on 2019-03-08?"
+        a = "223" # Washington Wizards 112; Charlotte Hornets 111
 
-    #     parsed_q = qa.process_question(q)
-    #     result = neo.getAnswer(parsed_q)
-    #     assert(a in result)
+        #result = neo.getScoresFromGame("Hornets@Wizards-2019-03-08")
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(int(a) == result)
+
+    def test_points5(self):
+        """
+        How many points did person score in specific game?
+        """
+        q = "How many points did Kemba Walker score in the Hornets and the Wizards game on 2019-03-08?"
+        a = 18
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == result)
+
+    def test_whoa(self):
+        """
+        Who scored X points in specific game?
+        """
+        q = "Who scored 18 points in the Hornets and the Wizards game on 2019-03-08?"
+        a = {"Kemba Walker"} # Changed to set
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a == result)
+
+    def test_whob(self):
+        """
+        Who had X rebounds in specific game?
+        """
+        q = "Who had 10 rebounds in the Hornets and the Wizards game on 2019-03-08?"
+        a = "Jeremy Lamb"
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
+    
+    def test_whoc(self):
+        """
+        Who scored the most points in specific game?
+        """
+        q = "Who scored the most points in the Heat and the Nets game on 2019-03-02?"
+        a = "Derrick Jones Jr."
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
+    
+    def test_whod(self):
+        """
+        Who scored the least points in specific game?
+        """
+        q = "Who scored the least points in the Bucks and the 76ers game on 2019-03-17?"
+        a = "Khris Middleton"
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
 
 
 if __name__ == "__main__":
