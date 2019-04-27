@@ -157,7 +157,7 @@ def getAnswer(parsed_q):
     players = parsed_q[0]
     teams = parsed_q[1]
     relation = parsed_q[2]
-    w_word = parsed_q[3].title()
+    w_word = parsed_q[3].title() if parsed_q[3] != None else parsed_q[3]
     games = parsed_q[4]
     nouns = parsed_q[5]
     lookingFor = parsed_q[6].lower() if parsed_q[6] != None else parsed_q[6]
@@ -166,6 +166,7 @@ def getAnswer(parsed_q):
 
     if len(games) > 0:
         games[0] = modifyGame(games, teams)
+
 
     votingDict = {
                 'playersFromTeam': {'votes': 0, 'validParams': False},
@@ -190,7 +191,10 @@ def getAnswer(parsed_q):
         votingDict['teamScoresFromGame']['votes'] += 1
     elif(lookingFor == 'who'):
         votingDict['playersFromTeam']['votes'] += 1
-        votingDict['whoScoredNumPoints']['votes'] += 1
+        if(relation == 'scored'):
+            votingDict['whoScoredNumPoints']['votes'] += 1
+        if(relation == 'play for'):
+            votingDict['teamFromPlayer']['votes'] += 1
 
 
     if w_word == 'Who':
@@ -263,7 +267,7 @@ def getAnswer(parsed_q):
             maxKey = k
             maxVotes = votingDict[k]['votes']
     # print(maxKey)
-    # print(lookingFor)
+    #print(lookingFor)
     if (maxKey == 'playersFromTeam'):
         return getPlayersFromTeam(teams[0])
     elif (maxKey == 'whoScoredNumPoints'):

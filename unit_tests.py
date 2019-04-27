@@ -23,7 +23,7 @@ class MyUnitTests(TestCase):
             "David Fizdale",
             "Tim Hardaway Jr."
             }
-        
+
         parsed_q = qa.process_question(q)
         result = set(neo.getAnswer(parsed_q))
         assert(result == a)
@@ -42,7 +42,7 @@ class MyUnitTests(TestCase):
             "David Fizdale",
             "Tim Hardaway Jr."
             }
-        
+
         parsed_q = qa.process_question(q)
         result = set(neo.getAnswer(parsed_q))
         assert(result == a)
@@ -86,7 +86,7 @@ class MyUnitTests(TestCase):
     def test_which2(self):
         """
         Which team was at home? (Check relationship attribute)
-        """    
+        """
         q = "Which team was at home on 2019-03-23, the Spurs or Rockets?"
         a = "San Antonio Spurs"
 
@@ -149,7 +149,7 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
-    
+
     def test_who5(self):
         """
         Who scored the most points in specific game?
@@ -160,7 +160,7 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
-    
+
     def test_who6(self):
         """
         Who scored the least points in specific game?
@@ -171,7 +171,7 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
-    
+
     def test_who7(self):
         q = "Who plays for the Bulls?"
         a = {'Lauri Markkanen', 'Zach LaVine', 'Jim Boylen', 'Kris Dunn', 'Fred Hoiberg', 'Justin Holiday', 'Robin Lopez', 'Wendell Carter Jr.', 'Bobby Portis'}
@@ -279,7 +279,7 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
-    
+
     def test_whoc(self):
         """
         Who scored the most points in specific game?
@@ -290,7 +290,7 @@ class MyUnitTests(TestCase):
         parsed_q = qa.process_question(q)
         result = neo.getAnswer(parsed_q)
         assert(a in result)
-    
+
     def test_whod(self):
         """
         Who scored the least points in specific game?
@@ -302,6 +302,38 @@ class MyUnitTests(TestCase):
         result = neo.getAnswer(parsed_q)
         assert(a in result)
 
+    def test_team(self):
+        """
+        What team does x play for?
+        """
+        q = "What team does Jimmy Butler play for?"
+        a = 'Philadelphia 76ers'
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
+
+    def test_team2(self):
+        """
+        Who does x play for?
+        """
+        q = "Who does Jimmy Butler play for?"
+        a = 'Philadelphia 76ers'
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
+
+    def test_team3(self):
+        """
+        What team does x play on?
+        """
+        q = "What team does Jimmy Butler play on?"
+        a = 'Philadelphia 76ers'
+
+        parsed_q = qa.process_question(q)
+        result = neo.getAnswer(parsed_q)
+        assert(a in result)
 
 if __name__ == "__main__":
     main()
