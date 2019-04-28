@@ -1,5 +1,6 @@
 import neo4jUtilities as neo
 import questionProcessingOpenie as qa
+import googleEntityExtraction as googleEE
 
 import json
 
@@ -12,9 +13,10 @@ if __name__ == "__main__":
         if(text.lower() in {'q', 'quit'}):
             shouldStop = True
         else:
+            entities = googleEE.get_entities(text);
             parsed_q = qa.process_question(text)
             print("Answer:")
-            print(neo.getAnswer(parsed_q))
+            print(neo.getAnswer(parsed_q + entities))
 
     # print('temp', temp)
 
