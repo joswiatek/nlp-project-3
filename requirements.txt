@@ -39,5 +39,5 @@ stanfordnlp==0.1.2
 thinc==7.0.4
 torch==1.0.1.post2
 tqdm==4.31.1
-urllib3==1.24.1
+urllib3==1.24.2
 wasabi==0.2.1
