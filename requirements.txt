@@ -14,7 +14,7 @@ gensim==3.7.1
 idna==2.8
 jmespath==0.9.4
 jsonschema==2.6.0
-lxml==4.3.3
+lxml==4.6.3
 murmurhash==1.0.2
 neo4j==1.7.2
 neobolt==1.7.4
